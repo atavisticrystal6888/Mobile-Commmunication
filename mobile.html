@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Wireless Communication Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .nav-button {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .nav-button.active {
+            background-color: #0d9488; /* teal-600 */
+            color: white;
+        }
+        .nav-button:hover:not(.active) {
+            background-color: #ccfbf1; /* teal-100 */
+        }
+        .interactive-diagram div {
+            border: 1px solid #e5e7eb; /* gray-200 */
+            padding: 8px;
+            margin: 4px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .interactive-diagram div:hover {
+            background-color: #fef3c7; /* amber-100 */
+        }
+        .details-box {
+            border: 1px solid #f97316; /* orange-500 */
+            background-color: #fff7ed; /* orange-50 */
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px; /* Example max-width */
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px; /* Base height */
+            max-height: 400px; /* Max height */
+        }
+        @media (min-width: 768px) { /* md breakpoint */
+            .chart-container {
+                height: 350px;
+            }
+        }
+        h2 { margin-bottom: 0.75rem; }
+        h3 { margin-bottom: 0.5rem; margin-top: 1rem; }
+        p { margin-bottom: 0.5rem; line-height: 1.6; }
+        ul { list-style-type: disc; margin-left: 1.5rem; margin-bottom: 0.5rem;}
+        strong { font-weight: 600; }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+        th, td { border: 1px solid #d1d5db; padding: 0.5rem; text-align: left; }
+        th { background-color: #f3f4f6; }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        .comparison-table td, .comparison-table th {
+            font-size: 0.875rem; /* text-sm */
+        }
+    </style>
+</head>
+<body class="bg-amber-50 text-neutral-800">
+    <div class="container mx-auto p-4">
+        <header class="text-center py-8">
+            <h1 class="text-4xl font-bold text-orange-700">Interactive Wireless Communication Systems Notes</h1>
+            <p class="text-lg text-neutral-600 mt-2">A quick revision guide for your endsem exams.</p>
+        </header>
+
+        <nav class="flex flex-wrap justify-center gap-2 mb-8 sticky top-0 bg-amber-50 py-4 z-10 shadow-md rounded-lg">
+            <button class="nav-button active text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-semibold text-neutral-700 bg-stone-100" onclick="showTab('unit1')" data-unit="unit1">Unit 1: Intro</button>
+            <button class="nav-button text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-semibold text-neutral-700 bg-stone-100" onclick="showTab('unit2')" data-unit="unit2">Unit 2: Modern Systems</button>
+            <button class="nav-button text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-semibold text-neutral-700 bg-stone-100" onclick="showTab('unit3')" data-unit="unit3">Unit 3: Cellular Intro</button>
+            <button class="nav-button text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-semibold text-neutral-700 bg-stone-100" onclick="showTab('unit4')" data-unit="unit4">Unit 4: Design Fund.</button>
+            <button class="nav-button text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-semibold text-neutral-700 bg-stone-100" onclick="showTab('unit5')" data-unit="unit5">Unit 5: Multiple Access</button>
+            <button class="nav-button text-sm sm:text-base px-3 py-2 sm:px-4 sm:py-2 rounded-lg font-semibold text-neutral-700 bg-stone-100" onclick="showTab('unit6')" data-unit="unit6">Unit 6: Networking</button>
+        </nav>
+
+        <main>
+            <section id="unit1" class="tab-content active bg-stone-100 p-6 rounded-lg shadow-lg">
+                <h2 class="text-3xl font-semibold text-orange-600">Unit 1: Introduction to Wireless Communication Systems</h2>
+                <p class="mb-6 text-neutral-700">This unit introduces the fundamental concepts of wireless and mobile communication, tracing its evolution and outlining the basic architecture of cellular systems. Understanding these basics is crucial for grasping more advanced topics in wireless technology.</p>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">A. Defining Mobile and Wireless Communication</h3>
+                    <p><strong>Wireless communication</strong> is the transmission of information over distances without physical conductors (wires/cables). <strong>Mobile communication</strong> enables communication between individuals in different places without physical connections, using devices like smartphones that connect wirelessly, typically via radio waves.</p>
+                    <p>The first commercial mobile telephony began in 1946 (BELL, USA), using a single high-power analog transmitter. "Mobile" often refers to terminals in high-speed platforms (e.g., car phones), while "portable" refers to handheld terminals for walking speeds.</p>
+                </div>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">B. Limitations of Conventional Mobile Telephone Systems</h3>
+                    <p>Early systems suffered from:</p>
+                    <ul>
+                        <li><strong>Limited Service Capability:</strong> No handoff between zones; calls dropped when moving. Fixed channels per zone limited user capacity.</li>
+                        <li><strong>Poor Performance:</strong> Very few channels for large areas (e.g., 33 channels for a 50-mile diameter area in early MTS/IMTS). High call blocking in cities like New York by 1976.</li>
+                        <li><strong>Inefficient Spectrum Utilization:</strong> One channel per customer across the entire coverage area, leading to underutilized spectrum.</li>
+                    </ul>
+                    <p>These limitations, along with advances in LSI/microprocessor tech, drove the need for the cellular concept.</p>
+                </div>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">C. Basic Cellular System Architecture</h3>
+                    <p>A cellular system consists of the Mobile Station (MS), Base Station (BS), and Mobile Switching Center (MSC/MTSO).</p>
+                    <div class="interactive-diagram text-center my-4 p-4 bg-orange-50 rounded-lg" id="cellularArchDiagram">
+                        <div onclick="showDetail('msDetail', 'cellularArchDiagram')">Mobile Station (MS)</div>
+                        <div onclick="showDetail('bsDetail', 'cellularArchDiagram')">Base Station (BS / Cell Site)</div>
+                        <div onclick="showDetail('mscDetail', 'cellularArchDiagram')">Mobile Switching Center (MSC / MTSO)</div>
+                    </div>
+                    <div id="msDetail" class="details-box hidden"><p><strong>Mobile Station (MS):</strong> User's device (e.g., phone). Contains control unit, transceiver, antenna. Can be vehicle-mounted or portable.</p></div>
+                    <div id="bsDetail" class="details-box hidden"><p><strong>Base Station (BS):</strong> Interfaces MTSO and mobile units. Has control unit, radio cabinets, antennas, power plant, data terminals. Transmit power determines cell size. Bridges communication for users in its cell.</p></div>
+                    <div id="mscDetail" class="details-box hidden"><p><strong>Mobile Switching Center (MSC/MTSO):</strong> Central coordinator for all cell sites. Includes cellular processor and switch. Interfaces with telephone company. Manages call processing, billing, handoffs. Connects mobile users to each other and to PSTN. Handles ~100,000 users, 5,000 simultaneous calls.</p></div>
+                    <p><strong>Links:</strong> Radio Links (Air Interface) between MS and BS for voice/signaling. High-Speed Data Links (microwave/T-carriers) between BS and MTSO for voice/data.</p>
+                </div>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">D. Common Air Interface (CAI) & Call Establishment</h3>
+                    <p><strong>CAI:</strong> Protocol for MS-BS radio interaction. Defines signaling for control channels and speech/channel coding for reliability.</p>
+                    <p><strong>Channel Types:</strong></p>
+                    <ul>
+                        <li><strong>FCC (Forward Control Channel):</strong> BS to MS setup.</li>
+                        <li><strong>RCC (Reverse Control Channel):</strong> MS to BS setup.</li>
+                        <li><strong>FVC (Forward Voice Channel):</strong> BS to MS voice.</li>
+                        <li><strong>RVC (Reverse Voice Channel):</strong> MS to BS voice.</li>
+                    </ul>
+                    <div class="mt-4">
+                        <h4 class="text-xl font-semibold text-orange-600">Call Flow Visualization</h4>
+                        <div class="flex flex-col md:flex-row gap-4 mt-2">
+                            <div class="flex-1 p-3 bg-amber-100 rounded-lg shadow">
+                                <h5 class="font-semibold text-lg">Mobile-Originated Call:</h5>
+                                <ol class="list-decimal list-inside space-y-1 text-sm">
+                                    <li>User dials & sends.</li>
+                                    <li>Service request via RCC.</li>
+                                    <li>BS receives, forwards to MSC.</li>
+                                    <li>MSC allocates voice channel; BS links to MS.</li>
+                                    <li>MSC connects to PSTN party.</li>
+                                    <li>Voice transmission begins.</li>
+                                </ol>
+                            </div>
+                            <div class="flex-1 p-3 bg-amber-100 rounded-lg shadow">
+                                <h5 class="font-semibold text-lg">PSTN-Initiated Call:</h5>
+                                <ol class="list-decimal list-inside space-y-1 text-sm">
+                                    <li>Landline dials mobile number; call routed to MSC.</li>
+                                    <li>MSC pages relevant BSs.</li>
+                                    <li>BSs broadcast page on FCC.</li>
+                                    <li>MS detects ID, responds on RCC with ESN/SCM.</li>
+                                    <li>MSC verifies, instructs BS to move MS to voice channel.</li>
+                                    <li>BS (FCC) directs MS to voice channel.</li>
+                                    <li>MS tunes to voice channel.</li>
+                                    <li>MSC connects MS to PSTN caller.</li>
+                                    <li>Voice transmission begins.</li>
+                                </ol>
+                            </div>
+                        </div>
+                         <p class="mt-2 text-xs text-neutral-500">Click on steps in a more detailed interactive version to see data flow.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="unit2" class="tab-content bg-stone-100 p-6 rounded-lg shadow-lg">
+                <h2 class="text-3xl font-semibold text-orange-600">Unit 2: Modern Wireless Communication Systems</h2>
+                <p class="mb-6 text-neutral-700">This unit explores the evolution from 2G to 5G, detailing key technologies and systems like GSM, GPRS, EDGE, 3G (UMTS, CDMA-2000), 4G (LTE), and 5G. It also covers other important wireless technologies like WLL, WLANs, and Bluetooth.</p>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">A. Evolution of Mobile Generations (1G-5G)</h3>
+                    <p>A comparative overview of mobile communication generations highlights the rapid advancements in speed, technology, and services.</p>
+                    <div class="chart-container my-4">
+                        <canvas id="generationChart"></canvas>
+                    </div>
+                    <div class="overflow-x-auto mt-4">
+                        <table class="min-w-full comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Feature</th>
+                                    <th>1G</th>
+                                    <th>2G</th>
+                                    <th>2.5G/2.75G</th>
+                                    <th>3G</th>
+                                    <th>4G</th>
+                                    <th>5G</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Key Tech</strong></td>
+                                    <td>Analog, FDMA</td>
+                                    <td>Digital, TDMA/CDMA</td>
+                                    <td>GPRS, EDGE</td>
+                                    <td>W-CDMA, CDMA-2000</td>
+                                    <td>LTE</td>
+                                    <td>Next-Gen</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Typical Speed</strong></td>
+                                    <td>2.4 Kbps</td>
+                                    <td>64 Kbps</td>
+                                    <td>~171-473 Kbps</td>
+                                    <td>Up to 2 Mbps (14 HSPA)</td>
+                                    <td>Up to 1 Gbps</td>
+                                    <td>1-10 Gbps</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Primary Focus</strong></td>
+                                    <td>Voice</td>
+                                    <td>Voice, SMS</td>
+                                    <td>Enhanced Data</td>
+                                    <td>Multimedia, Mobile Internet</td>
+                                    <td>Mobile Broadband</td>
+                                    <td>IoT, Ultra-low Latency</td>
+                                </tr>
+                                 <tr>
+                                    <td><strong>Advantages</strong></td>
+                                    <td>Mobile voice</td>
+                                    <td>Capacity, Security, SMS</td>
+                                    <td>Faster data</td>
+                                    <td>Video call, Apps, Roaming</td>
+                                    <td>High speed, Low latency</td>
+                                    <td>Extreme speed & latency</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Disadvantages</strong></td>
+                                    <td>Poor quality, Low capacity, No data</td>
+                                    <td>Low data rate</td>
+                                    <td>Costly</td>
+                                    <td>Costly, High BW req.</td>
+                                    <td>Costly</td>
+                                    <td>Very Costly</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                 <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">B. Second Generation (2G) Cellular Networks</h3>
+                    <p>2G introduced digital technology, improving spectral efficiency and enabling services like SMS.</p>
+                    <p><strong>GSM (Global System for Mobile Communications):</strong></p>
+                    <ul>
+                        <li>Launched 1991. Bands: 935-960 MHz (Forward), 890-915 MHz (Reverse). 124 channels (200 KHz).</li>
+                        <li>TDMA: 8 users/channel. GMSK modulation. Data rate: 270.8 Kbps. Voice: 13 kbps.</li>
+                        <li>Features: SMS, MMS, roaming, data/fax (9.6 Mbps), CLIP.</li>
+                    </ul>
+                    <div class="interactive-diagram text-center my-4 p-4 bg-orange-50 rounded-lg" id="gsmArchDiagram">
+                        <div onclick="showDetail('msGsmDetail', 'gsmArchDiagram')">Mobile Station (MS)</div>
+                        <div onclick="showDetail('bssDetailGsm', 'gsmArchDiagram')">Base Station Subsystem (BSS)</div>
+                        <div onclick="showDetail('nssDetail', 'gsmArchDiagram')">Network Switching Subsystem (NSS)</div>
+                        <div onclick="showDetail('ossDetail', 'gsmArchDiagram')">Operation Support Subsystem (OSS)</div>
+                    </div>
+                    <div id="msGsmDetail" class="details-box hidden"><p><strong>MS (Mobile Station):</strong> Physical equipment + SIM card. Provides air interface for voice, data, SMS.</p></div>
+                    <div id="bssDetailGsm" class="details-box hidden"><p><strong>BSS (Base Station Subsystem):</strong> Consists of BTS (Base Transceiver Station) and BSC (Base Station Controller). BTS handles radio link protocols. BSC manages radio resources, handovers, connects to MSC.</p></div>
+                    <div id="nssDetail" class="details-box hidden"><p><strong>NSS (Network Switching Subsystem):</strong> Core is MSC. Handles call switching, authentication, registration, location updating, routing. Includes HLR, VLR, AUC, EIR.</p></div>
+                    <div id="ossDetail" class="details-box hidden"><p><strong>OSS (Operation Support Subsystem):</strong> Operations and Maintenance Center (OMC). Manages administration, security, configuration, maintenance.</p></div>
+                    <p><strong>Other 2G Systems:</strong> D-AMPS (IS-136), IS-95 (CDMA).</p>
+                </div>
+
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">C. Wireless in Local Loop (WLL)</h3>
+                    <p>WLL replaces traditional wired connections (copper) with wireless radio links to connect subscribers to the local telephone exchange. It's cost-effective for rural or hard-to-wire areas.</p>
+                    <p><strong>Architecture:</strong> PSTN, WANU (Wireless Access Network Unit at exchange), Switch Function, WASU (Wireless Access Subscriber Unit at premises).</p>
+                    <p><strong>Advantages:</strong> No physical wiring, cost-effective, quick deployment, secure, scalable. Supports voice, internet, data, fax.</p>
+                    <p><strong>Disadvantages:</strong> Susceptible to interference, potentially lower bandwidth, limited range.</p>
+                </div>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">D. Wireless Local Area Networks (WLAN)</h3>
+                    <p>WLANs provide wireless connectivity within homes, buildings, offices, extending wired LANs. Typically low power, unlicensed spectrum (e.g., Wi-Fi IEEE 802.11).</p>
+                    <p><strong>Modes:</strong> Infrastructure (via Access Point), Ad Hoc (device-to-device).</p>
+                    <p><strong>Advantages:</strong> Fast installation, flexibility, mobility, reduced cost of ownership.</p>
+                    <p><strong>Disadvantages:</strong> Slower bandwidth than wired, security concerns, capacity limits.</p>
+                    <p><strong>Security:</strong> WPA3, OWE, MPSK. QoS via WMM.</p>
+                </div>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">E. Bluetooth and Personal Area Networks (PANs)</h3>
+                    <p>Bluetooth creates ad-hoc PANs for temporary connections in a personal workspace (nominal range 10m). Operates in 2.4 GHz ISM band, uses Frequency Hopping TDD.</p>
+                    <p><strong>Architecture:</strong></p>
+                    <ul>
+                        <li><strong>Piconet:</strong> 1 Master, up to 7 active Slaves. Max 8 active nodes.</li>
+                        <li><strong>Scatternet:</strong> Interconnected Piconets. A slave in one can be master/slave in another (bridge slave).</li>
+                    </ul>
+                    <p><strong>Data Rate:</strong> Up to 24 Mbps (v3.0+).</p>
+                    <p><strong>Advantages:</strong> Low cost, ease of use, ad-hoc, fast connection, voice/data.</p>
+                    <p><strong>Disadvantages:</strong> Lower security, slower than WLAN, small range, no native routing.</p>
+                </div>
+            </section>
+
+            <section id="unit3" class="tab-content bg-stone-100 p-6 rounded-lg shadow-lg">
+                <h2 class="text-3xl font-semibold text-orange-600">Unit 3: Introduction to Cellular Mobile Systems</h2>
+                <p class="mb-6 text-neutral-700">This unit delves into the specifics of cellular systems, covering spectrum allocation, basic system operations, performance criteria, and a comparison between analog and digital cellular technologies, including an overview of GSM architecture.</p>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">A. Spectrum Allocation</h3>
+                    <p>Spectrum allocation refers to the designation of specific frequency bands by regulatory bodies (like the FCC in the U.S. or ITU globally) for different wireless services, including mobile communications. Efficient allocation is crucial to prevent interference and maximize the use of this finite resource. Cellular systems operate in licensed bands, meaning operators pay for exclusive rights to use certain frequencies within a geographic area.</p>
+                </div>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">B. Basic Cellular Systems & Operation</h3>
+                    <p>Covered in Unit 1 (Basic Architecture & Call Establishment). The core idea is to divide a large service area into smaller cells, each served by a low-power base station. This allows for frequency reuse, significantly increasing system capacity. The MSC coordinates handoffs as users move between cells.</p>
+                </div>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">C. Performance Criteria</h3>
+                    <p>Key metrics for evaluating cellular system performance:</p>
+                    <ul>
+                        <li><strong>Voice Quality:</strong> Subjectively rated (e.g., Mean Opinion Score - MOS). Aim for toll quality (MOS ≥ 4).</li>
+                        <li><strong>Service Quality:</strong>
+                            <ul>
+                                <li><strong>Coverage:</strong> Percentage of area with good signal (e.g., 90% in flat terrain).</li>
+                                <li><strong>Grade of Service (GOS):</strong> Probability of a call being blocked or delayed (e.g., 2% blocking during busy hour).</li>
+                                <li><strong>Dropped Calls:</strong> Rate of calls terminated unintentionally. Must be minimized.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Special Features:</strong> Availability of services like call forwarding, voicemail, roaming.</li>
+                    </ul>
+                </div>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">D. Analog vs. Digital Cellular Systems</h3>
+                     <div class="overflow-x-auto">
+                        <table class="min-w-full comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Feature</th>
+                                    <th>Analog (e.g., AMPS - 1G)</th>
+                                    <th>Digital (e.g., GSM, CDMA - 2G+)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Traffic Channel</strong></td>
+                                    <td>Voice using FM</td>
+                                    <td>Voice encoded in digital format</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Data Processing</strong></td>
+                                    <td>More difficult</td>
+                                    <td>Easier (modems)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Encryption/Security</strong></td>
+                                    <td>No inherent security</td>
+                                    <td>Provides encryption capabilities</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Noise</strong></td>
+                                    <td>More susceptible to noise</td>
+                                    <td>Inherently less noisy, better error correction</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Error Detection/Correction</strong></td>
+                                    <td>No such facility; voice clarity can suffer</td>
+                                    <td>Provided; clearer voice</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Channel Access</strong></td>
+                                    <td>One channel per user (FDMA)</td>
+                                    <td>Channel shared by multiple users (TDMA/CDMA)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Capacity</strong></td>
+                                    <td>Lower</td>
+                                    <td>Higher due to efficient spectrum use</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Compatibility with Computers</strong></td>
+                                    <td>Not directly compatible</td>
+                                    <td>Compatible (digital format)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                 <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">E. Architecture of GSM</h3>
+                    <p>GSM architecture is detailed under Unit 2. It consists of the Mobile Station (MS), Base Station Subsystem (BSS - comprising BTS and BSC), Network Switching Subsystem (NSS - comprising MSC, HLR, VLR, AUC, EIR), and Operation Support Subsystem (OSS).</p>
+                     <p class="text-sm text-neutral-600">Refer to the interactive diagram in Unit 2 for a visual breakdown of GSM components.</p>
+                </div>
+            </section>
+
+            <section id="unit4" class="tab-content bg-stone-100 p-6 rounded-lg shadow-lg">
+                <h2 class="text-3xl font-semibold text-orange-600">Unit 4: Cellular System Design Fundamentals</h2>
+                <p class="mb-6 text-neutral-700">This unit covers essential design principles for cellular systems, including frequency reuse, channel assignment strategies, handoff mechanisms, interference management, and techniques for improving coverage and capacity.</p>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">A. Frequency Reuse</h3>
+                    <p>Frequency reuse is a core concept where the same set of frequencies is used in different geographic cells that are sufficiently separated to avoid unacceptable interference. This dramatically increases system capacity.</p>
+                    <p>A <strong>cluster</strong> is a group of N cells where each cell uses a unique set of frequencies, and the entire set of system frequencies is used within the cluster. The cluster can then be repeated. Common cluster sizes (N) are 4, 7, 12. The frequency reuse factor is 1/N.</p>
+                    <p>For hexagonal cells, $N = i^2 + ij + j^2$ (i, j are non-negative integers).</p>
+                    <div class="my-4 p-4 bg-amber-100 rounded-lg">
+                        <label for="clusterSizeSelector" class="block mb-2 font-semibold">Select Cluster Size (N):</label>
+                        <select id="clusterSizeSelector" class="p-2 border rounded-md" onchange="drawFrequencyReuse()">
+                            <option value="1">N=1 (Ideal CDMA)</option>
+                            <option value="3">N=3</option>
+                            <option value="4">N=4</option>
+                            <option value="7" selected>N=7</option>
+                            <option value="9">N=9</option>
+                            <option value="12">N=12</option>
+                        </select>
+                        <div id="freqReuseViz" class="mt-4 grid grid-cols-7 gap-1 w-full max-w-md mx-auto h-64 bg-white p-2 rounded shadow">
+                            </div>
+                        <p class="text-xs text-center mt-2">Simplified visualization of hexagonal cells and frequency groups.</p>
+                    </div>
+                </div>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">B. Channel Assignment Strategies</h3>
+                    <ul>
+                        <li><strong>Fixed Channel Assignment (FCA):</strong> Each cell is permanently allocated a predetermined set of voice channels. If all channels in a cell are occupied, a new call is blocked. Simple, but can be inefficient if traffic is uneven.
+                            <ul><li><em>Borrowing Strategy:</em> A congested cell can borrow channels from an adjacent cell.</li></ul>
+                        </li>
+                        <li><strong>Dynamic Channel Assignment (DCA):</strong> Voice channels are not permanently allocated to cells. When a call request is made, the serving base station requests a channel from the MSC. The MSC allocates a channel based on factors like frequency reuse constraints, signal strength, and traffic distribution. More complex, but can reduce blocking probability and increase trunking efficiency.</li>
+                    </ul>
+                </div>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">C. Handoff Strategies</h3>
+                    <p>Handoff (or handover) is the process of transferring an active call or data session from one cell to another or from one channel to another within the same cell as a mobile user moves. Essential for seamless communication.</p>
+                    <ul>
+                        <li><strong>Network-Controlled Handoff (NCHO):</strong> The network makes handoff decisions.</li>
+                        <li><strong>Mobile-Assisted Handoff (MAHO):</strong> The mobile station measures signal strength from surrounding base stations and reports this to the network, assisting in the handoff decision. Common in 2G systems like GSM.</li>
+                        <li><strong>Mobile-Controlled Handoff (MCHO):</strong> The mobile station makes the handoff decision.</li>
+                        <li><strong>Hard Handoff:</strong> "Break-before-make." The connection to the old base station is broken before the connection to the new one is established. Characteristic of FDMA and TDMA systems.</li>
+                        <li><strong>Soft Handoff:</strong> "Make-before-break." The mobile station temporarily connects to multiple base stations simultaneously. Characteristic of CDMA systems. Results in smoother transitions.</li>
+                    </ul>
+                </div>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">D. Interference and System Capacity</h3>
+                    <p>Interference is a major limiting factor. Capacity is related to how many users can be served with acceptable quality.</p>
+                    <ul>
+                        <li><strong>Co-channel Interference (CCI):</strong> Interference between cells using the same set of frequencies. Reduced by increasing distance between co-channel cells (larger N). S/I ratio is key.</li>
+                        <li><strong>Adjacent Channel Interference (ACI):</strong> Interference from signals in adjacent frequency channels due to imperfect filters. Minimized by careful channel assignment and filtering. Near-far effect is a severe form.</li>
+                    </ul>
+                    <p><strong>Power Control:</strong> Crucial for reducing interference (especially reverse channel CCI) and conserving battery life. Especially important in CDMA.</p>
+                </div>
+
+                 <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">E. Tracking and Grade of Service (GOS)</h3>
+                    <p><strong>Tracking:</strong> The process by which the system keeps track of a mobile user's location to route incoming calls and manage handoffs. Involves registration, location updates.</p>
+                    <p><strong>Grade of Service (GOS):</strong> A measure of the probability that a user will be denied access to the network (call blocked) or delayed. Typically defined as the blocking probability during the busy hour (e.g., 2%). Erlang B formula for blocked-calls-cleared systems, Erlang C for queued systems.</p>
+                     <div class="chart-container my-4">
+                        <canvas id="gosChart"></canvas>
+                    </div>
+                </div>
+
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">F. Improving Coverage and Capacity</h3>
+                    <ul>
+                        <li><strong>Cell Splitting:</strong> Dividing congested cells into smaller cells (microcells), each with its own BS, lower power, and reduced antenna height. Increases frequency reuse.</li>
+                        <li><strong>Sectoring:</strong> Using directional antennas at the BS to divide a cell into sectors (e.g., 3x120° or 6x60°). Reduces CCI by limiting interference to fewer co-channel cells, allowing smaller N. Increases handoffs and can reduce trunking efficiency.</li>
+                        <li><strong>Repeaters:</strong> Amplify and reradiate signals to extend coverage into hard-to-reach areas (tunnels, valleys). Do not add capacity.</li>
+                        <li><strong>Microcell Zone Concept (Intelligent Cell):</strong> Multiple zone sites (Tx/Rx) connected to a single BS, sharing radio equipment. Mobile is served by the zone with the strongest signal on the same channel. Reduces MSC handoff load and CCI.</li>
+                        <li><strong>Umbrella Cells:</strong> Co-locating large and small cells. Large cells provide wide coverage for high-speed users (fewer handoffs), small cells provide capacity for low-speed users.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section id="unit5" class="tab-content bg-stone-100 p-6 rounded-lg shadow-lg">
+                <h2 class="text-3xl font-semibold text-orange-600">Unit 5: Multiple Access Techniques for Wireless Communication</h2>
+                <p class="mb-6 text-neutral-700">This unit explains how multiple users share the limited radio spectrum. Key techniques include FDMA, TDMA, Spread Spectrum (CDMA), and SDMA.</p>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">A. Introduction to Multiple Access</h3>
+                    <p>Multiple access schemes allow many users to share a common transmission medium (radio spectrum). The main goal is to maximize the number of users while maintaining acceptable communication quality.</p>
+                </div>
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">B. Multiple Access Techniques Overview</h3>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="p-3 bg-amber-100 rounded-lg shadow">
+                            <h4 class="font-semibold text-lg text-orange-700">FDMA (Frequency Division Multiple Access)</h4>
+                            <p class="text-sm">Spectrum is divided into distinct frequency channels. Each user gets an exclusive frequency band for the duration of the call. Guard bands separate channels. Simple, but inefficient if channels are idle.</p>
+                            <div class="w-full h-20 bg-gray-200 mt-2 flex rounded overflow-hidden" aria-label="FDMA Visualization">
+                                <div class="h-full bg-blue-500 flex-1 border-r border-gray-300 flex items-center justify-center text-white text-xs">User 1 (F1)</div>
+                                <div class="h-full bg-green-500 flex-1 border-r border-gray-300 flex items-center justify-center text-white text-xs">User 2 (F2)</div>
+                                <div class="h-full bg-red-500 flex-1 flex items-center justify-center text-white text-xs">User 3 (F3)</div>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-amber-100 rounded-lg shadow">
+                            <h4 class="font-semibold text-lg text-orange-700">TDMA (Time Division Multiple Access)</h4>
+                            <p class="text-sm">Users share the same frequency band but are allocated different time slots. Data is transmitted in bursts. More spectrally efficient than FDMA. Requires synchronization.</p>
+                            <div class="w-full h-20 bg-gray-200 mt-2 flex flex-col rounded overflow-hidden" aria-label="TDMA Visualization">
+                                <div class="w-full bg-blue-500 flex-1 border-b border-gray-300 flex items-center justify-center text-white text-xs">User 1 (T1)</div>
+                                <div class="w-full bg-green-500 flex-1 border-b border-gray-300 flex items-center justify-center text-white text-xs">User 2 (T2)</div>
+                                <div class="w-full bg-red-500 flex-1 flex items-center justify-center text-white text-xs">User 3 (T3)</div>
+                            </div>
+                             <p class="text-xs text-center mt-1">(All on same frequency F1)</p>
+                        </div>
+                        <div class="p-3 bg-amber-100 rounded-lg shadow">
+                            <h4 class="font-semibold text-lg text-orange-700">CDMA (Code Division Multiple Access)</h4>
+                            <p class="text-sm">All users transmit simultaneously over the entire frequency band. Each user is assigned a unique pseudo-random code (spreading code) to differentiate their signal. Offers high capacity and soft handoff.</p>
+                             <div class="w-full h-20 bg-gray-200 mt-2 relative rounded overflow-hidden flex items-center justify-center" aria-label="CDMA Visualization">
+                                <div class="absolute inset-0 bg-purple-500 opacity-30"></div>
+                                <span class="text-white text-xs z-10">User 1 (Code1)</span>
+                                <span class="text-white text-xs z-10 ml-1">, User 2 (Code2)</span>
+                                <span class="text-white text-xs z-10 ml-1">, User 3 (Code3)</span>
+                                <p class="absolute bottom-1 text-xs text-white z-10">(All on same frequency F1, same time T1)</p>
+                            </div>
+                        </div>
+                        <div class="p-3 bg-amber-100 rounded-lg shadow">
+                            <h4 class="font-semibold text-lg text-orange-700">SDMA (Space Division Multiple Access)</h4>
+                            <p class="text-sm">Users are separated spatially using directional antennas or beamforming. Allows reuse of the same frequency/time/code in different spatial locations. Increases capacity and reduces interference.</p>
+                            <div class="w-full h-20 bg-gray-200 mt-2 relative rounded overflow-hidden flex items-center justify-center" aria-label="SDMA Visualization">
+                                <div class="absolute w-1/3 h-full bg-yellow-500 opacity-70 transform -rotate-12 origin-bottom-left rounded-tr-full"></div>
+                                <div class="absolute w-1/3 h-full bg-pink-500 opacity-70 rounded-t-full"></div>
+                                <div class="absolute w-1/3 h-full bg-indigo-500 opacity-70 transform rotate-12 origin-bottom-right rounded-tl-full"></div>
+                                <span class="text-black text-xs z-10">User A (Beam1)</span>
+                                <span class="text-black text-xs z-10 ml-1">, User B (Beam2)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">C. Spread Spectrum Multiple Access (CDMA in detail)</h3>
+                    <p><strong>Principles:</strong> Message signal is multiplied by a wideband pseudo-random spreading code. This spreads the signal's bandwidth. Processing gain = (Spread BW) / (Original BW). At receiver, signal is multiplied by same code to despread desired signal and spread interference.</p>
+                    <p><strong>Orthogonal Codes:</strong> Codes where the product of two distinct codes is zero, and product with itself is non-zero. Allows multiple users on same frequency without interference if power controlled.</p>
+                    <p><strong>Comparison with TDMA:</strong> CDMA generally offers higher capacity (N=1 frequency reuse), better interference management (with power control), superior voice quality (soft handoff), but is more complex.</p>
+                </div>
+            </section>
+
+            <section id="unit6" class="tab-content bg-stone-100 p-6 rounded-lg shadow-lg">
+                <h2 class="text-3xl font-semibold text-orange-600">Unit 6: Wireless Networking</h2>
+                <p class="mb-6 text-neutral-700">This unit discusses the differences between wireless and fixed networks, the development of wireless networks, fixed network hierarchies, traffic routing, data services, and key signaling concepts like CCS and ISDN.</p>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">A. Difference between Wireless and Fixed Telephone Networks</h3>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Feature</th>
+                                    <th>Fixed Network</th>
+                                    <th>Wireless Network</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><strong>Placement</strong></td><td>Stationary, cable/fixed links</td><td>Mobile, radio waves</td></tr>
+                                <tr><td><strong>Configuration</strong></td><td>Static</td><td>Dynamic (due to mobility)</td></tr>
+                                <tr><td><strong>Connection Management</strong></td><td>Central Offices (many lines)</td><td>MSCs (air traffic capacity)</td></tr>
+                                <tr><td><strong>Overhead Data</strong></td><td>Less</td><td>More (location changes)</td></tr>
+                                <tr><td><strong>Channel Conditions</strong></td><td>Stable</td><td>Hostile, random</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">B. Development of Wireless Networks & Fixed Network Hierarchy</h3>
+                    <p>Wireless networks evolved from basic coverage to complex systems integrated with the PSTN. The PSTN uses a digital signaling (DS) hierarchy (e.g., DS-0 for 64kbps voice, T-1/E-1 for multiple channels) for high-data-rate transport.</p>
+                </div>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">C. Traffic Routing in Wireless Networks</h3>
+                    <ul>
+                        <li><strong>Connection-Oriented (Virtual Circuit):</strong> Fixed path established for duration of call (e.g., circuit switching for voice). Ordered data arrival. Inefficient for bursty data.</li>
+                        <li><strong>Connectionless (Datagram):</strong> No fixed path; data broken into packets, routed independently (e.g., packet switching for data). Packets may arrive out of order. Efficient for bursty data. X.25 is an early standard.</li>
+                    </ul>
+                </div>
+
+                 <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">D. Wireless Data Services</h3>
+                    <p>Early services for data over mobile networks:</p>
+                    <ul>
+                        <li><strong>CDPD (Cellular Digital Packet Data):</strong> Used idle AMPS channels (19.2 kbps).</li>
+                        <li><strong>ARDIS:</strong> Private network (Motorola/IBM) for short messages (4.8-19.2 kbps).</li>
+                        <li><strong>RAM Mobile Data (RMD):</strong> Public service (Mobitex protocol) for data/fax (8 kbps).</li>
+                    </ul>
+                </div>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">E. Common Channel Signaling (CCS)</h3>
+                    <p>Transmits control/signaling data on a separate channel from user data (out-of-band signaling). SS7 (Signaling System No. 7) is a key CCS protocol.</p>
+                    <p><strong>Advantages:</strong> Faster communication, increased capacity (voice trunks for voice only), efficiency, simultaneous handling, reduced delay/interference.</p>
+                    <p><strong>SS7 Architecture:</strong> SSPs (Switches), STPs (Packet Switches/Routers), SCPs (Databases for call processing).</p>
+                </div>
+
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">F. ISDN (Integrated Services Digital Network)</h3>
+                    <p>Network framework based on CCS, providing digital end-to-end connectivity for voice, data, video. Uses SS7 for network signaling.</p>
+                    <ul>
+                        <li><strong>Channels:</strong> B-channels (Bearer, user traffic), D-channels (Data/Signaling), H-channels (High-speed).</li>
+                        <li><strong>Interfaces:</strong> BRI (2B+D for small users), PRI (23B+D or 30B+D for large users).</li>
+                        <li><strong>B-ISDN & ATM:</strong> Broadband ISDN uses Asynchronous Transfer Mode for higher bandwidths (Mbps to Gbps), handling voice/data in fixed-length cells (53 bytes).</li>
+                    </ul>
+                </div>
+                <div class="mb-6 p-4 bg-white rounded-lg shadow">
+                    <h3 class="text-2xl font-semibold text-teal-600">G. Intelligent Cell Concept</h3>
+                    <p>Discussed in Unit 4 (Improving Coverage & Capacity). Aims to reduce MSC handoff load and co-channel interference by using multiple low-power zone transmitters within a cell, all controlled by a single base station. The mobile communicates on the same frequency channel as it moves between zones, with the base station switching the active zone site.</p>
+                </div>
+            </section>
+        </main>
+
+        <footer class="text-center py-8 mt-12 border-t border-orange-200">
+            <p class="text-neutral-600">&copy; 2024 Wireless Communication Interactive Notes. For educational purposes.</p>
+        </footer>
+    </div>
+
+    <script>
+        let currentDetailsBox = null;
+        let currentDiagram = null;
+
+        function showTab(unitId) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+            document.getElementById(unitId).classList.add('active');
+
+            const buttons = document.querySelectorAll('.nav-button');
+            buttons.forEach(button => button.classList.remove('active'));
+            // Updated selector to use data-unit attribute
+            document.querySelector(`button[data-unit="${unitId}"]`).classList.add('active');
+        }
+
+        function showDetail(detailId, diagramId) {
+            const detailElement = document.getElementById(detailId);
+            if (currentDetailsBox && currentDetailsBox !== detailElement) {
+                currentDetailsBox.classList.add('hidden');
+            }
+            if (currentDiagram !== diagramId && currentDetailsBox) {
+                 currentDetailsBox.classList.add('hidden');
+            }
+
+            if (detailElement) {
+                detailElement.classList.toggle('hidden');
+                currentDetailsBox = detailElement.classList.contains('hidden') ? null : detailElement;
+                currentDiagram = diagramId;
+            }
+        }
+
+        const generationData = {
+            labels: ['1G', '2G', '2.5G/2.75G', '3G', '4G', '5G'],
+            datasets: [{
+                label: 'Max Typical Speed (Kbps Log Scale)',
+                data: [2.4, 64, 473, 2000, 1000000, 10000000], // 4G as 1Gbps, 5G as 10Gbps
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.7)',
+                    'rgba(54, 162, 235, 0.7)',
+                    'rgba(255, 206, 86, 0.7)',
+                    'rgba(75, 192, 192, 0.7)',
+                    'rgba(153, 102, 255, 0.7)',
+                    'rgba(255, 159, 64, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        const generationChartCtx = document.getElementById('generationChart').getContext('2d');
+        new Chart(generationChartCtx, {
+            type: 'bar',
+            data: generationData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        type: 'logarithmic',
+                        title: {
+                            display: true,
+                            text: 'Speed (Kbps)'
+                        },
+                        ticks: {
+                            callback: function(value, index, values) {
+                                if (value === 10000000) return '10 Gbps';
+                                if (value === 1000000) return '1 Gbps';
+                                if (value === 100000) return '100 Mbps';
+                                if (value === 10000) return '10 Mbps';
+                                if (value === 1000) return '1 Mbps';
+                                if (value === 100) return '100 Kbps';
+                                if (value === 10) return '10 Kbps';
+                                return value + ' Kbps';
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Max Typical Speeds by Mobile Generation (Log Scale)'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                let value = context.parsed.y;
+                                if (value >= 1000000) return label + (value/1000000) + ' Gbps';
+                                if (value >= 1000) return label + (value/1000) + ' Mbps';
+                                return label + value + ' Kbps';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        function drawFrequencyReuse() {
+            const N = parseInt(document.getElementById('clusterSizeSelector').value);
+            const viz = document.getElementById('freqReuseViz');
+            viz.innerHTML = ''; // Clear previous
+            viz.className = 'mt-4 grid gap-1 w-full max-w-md mx-auto h-64 bg-white p-2 rounded shadow'; // Reset class
+
+            const colors = ['bg-red-400', 'bg-blue-400', 'bg-green-400', 'bg-yellow-400', 'bg-purple-400', 'bg-pink-400', 'bg-indigo-400', 'bg-teal-400', 'bg-orange-400', 'bg-lime-400', 'bg-cyan-400', 'bg-emerald-400'];
+            
+            let rows, cols;
+            // Adjust grid layout based on N for better visualization, this is a simplification
+            if (N <= 3) { cols = 3; rows = 3; }
+            else if (N <= 7) { cols = 5; rows = 5; }
+            else { cols = 7; rows = 7; }
+            viz.classList.add(`grid-cols-${cols}`);
+
+            const totalCellsToDraw = cols * rows; // Draw a fixed grid for simplicity
+
+            for (let i = 0; i < totalCellsToDraw; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('h-12', 'w-12', 'flex', 'items-center', 'justify-center', 'text-white', 'text-xs', 'font-semibold', 'rounded');
+                // This is a highly simplified coloring for visualization purposes
+                // A real frequency plan is more complex to map visually in a small grid
+                cell.classList.add(colors[i % N]);
+                cell.textContent = `C${i % N + 1}`;
+                // Attempt at hexagonal-like arrangement (very simplified)
+                if ((i % cols) % 2 !== 0 && rows > 1) { // Offset odd columns slightly for hex feel
+                     cell.style.transform = 'translateY(50%)';
+                }
+                if (i >= cols * (rows-1) && (i % cols) % 2 !==0 && rows > 1) { // Hide offset cells in last row if they overflow
+                    cell.style.visibility = 'hidden';
+                }
+
+                viz.appendChild(cell);
+            }
+        }
+        
+        const gosData = {
+            labels: [1, 2, 5, 10, 15, 20], // Offered Traffic (Erlangs)
+            datasets: [
+                {
+                    label: 'GOS with 5 Channels (Erlang B)',
+                    data: [0.019, 0.074, 0.263, 0.521, 0.690, 0.791], // Example GOS values
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    fill: false,
+                    tension: 0.1
+                },
+                {
+                    label: 'GOS with 10 Channels (Erlang B)',
+                    data: [0.000, 0.002, 0.033, 0.176, 0.360, 0.514], // Example GOS values
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    fill: false,
+                    tension: 0.1
+                }
+            ]
+        };
+
+        const gosChartCtx = document.getElementById('gosChart').getContext('2d');
+        new Chart(gosChartCtx, {
+            type: 'line',
+            data: gosData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        title: { display: true, text: 'Grade of Service (Blocking Probability)' },
+                        min: 0,
+                        max: 1,
+                        ticks: { stepSize: 0.1 }
+                    },
+                    x: {
+                        title: { display: true, text: 'Offered Traffic (Erlangs)' }
+                    }
+                },
+                plugins: {
+                    title: { display: true, text: 'Grade of Service vs. Offered Traffic' },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.dataset.label}: ${(context.parsed.y * 100).toFixed(1)}%`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+
+        // Initial calls
+        showTab('unit1');
+        drawFrequencyReuse();
+    </script>
+</body>
+</html>
